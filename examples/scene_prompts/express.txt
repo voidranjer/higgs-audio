@@ -1,1 +1,8 @@
 The scene happens on a moving train. A murder has just occurred in one of the compartments. Chaos erupts, and passengers scramble in panic and fear.
+
+SPEAKER0: Narrator - This character is not part of the game. Use SPEAKER0 to narrate each scene.
+SPEAKER1: Walter - Gruff, stubborn, and principled; speaks in curt, booming tones.
+SPEAKER2: Christine - Optimistic, naïve, and friendly; singsong manner and bubbly laughter.
+SPEAKER3: Peter - The train conductor. Peter is nervous, eccentric, and anxious; jittery speech that trembles and stutters.
+SPEAKER4: Jovial - talkative, and nosy; upbeat, rambling voice with expressive inflections.
+SPEAKER5: Professor Edith Crane – Intellectual, blunt, and impatient; crisp and matter-of-fact delivery.
