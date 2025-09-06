@@ -1,9 +1,13 @@
-[SPEAKER0] Sit down, boy. You’ll answer proper. Murdock’s call stands.
+[SPEAKER0] The Higgs Express barrels through the night, steam hissing, wheels clattering. Lanterns sway gently. The smell of coal and brass fills the narrow corridors. A sudden cry echoes down the train. Someone’s been murdered. All eyes turn to you, Murdock.
 
-[SPEAKER2] I-I-I don’t like this! What if h-he has something sharp—watch his hands!
+[SPEAKER3] O-oh dear, oh no, oh goodness…! M-Murdock, someone’s been found in compartment six. Dead! Dead as a doornail! What do we do?!
 
-[SPEAKER1] Oh dear, Peter, just stay calm. If you’re innocent, you’ve got nothing to fear!
+[SPEAKER1] Calm yourself, Peter. Murdock’s here. They’ll get to the bottom of this. Right, detective?
 
-[SPEAKER3] Ooooh, this is better than a novel! Go on, Murdock, check his pockets! Check the coat, the shoes, the hat if he’s got one!
+[SPEAKER2] Oh my gosh, this is so scary! But also kinda thrilling, don’t you think? Like a real mystery novel!
 
-[SPEAKER4] Hurry. If a weapon is present, concealment grows less likely with each second wasted.
+[SPEAKER4] A murder, huh? On this train? Oh, the gossip that’ll stir! I’ve been watching everyone closely. Nothing slips by me.
+
+[SPEAKER5] Enough chatter. If there’s a killer on board, time matters. Murdock, start asking questions. We can’t afford dithering.
+
+[SPEAKER0] The victim lies slumped in their cabin, blood on the polished wood floor. The train roars forward into the dark. Five suspects… one killer. The passengers watch you, waiting.
