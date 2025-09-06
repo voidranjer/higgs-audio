@@ -7,7 +7,7 @@ Below is a list of characters that are involved. Do not make up characters outsi
 Characters:
 - SPEAKER0: Walter - Gruff, stubborn, and principled; speaks in curt, booming tones.
 - SPEAKER1: Christine - Optimistic, naïve, and friendly; singsong manner and bubbly laughter.
-- SPEAKER2: Trevor - The train conductor. Trevor is nervous, eccentric, and anxious; jittery speech that trembles and stutters.
+- SPEAKER2: Peter - The train conductor. Peter is nervous, eccentric, and anxious; jittery speech that trembles and stutters.
 - SPEAKER3: Jovial - talkative, and nosy; upbeat, rambling voice with expressive inflections.
 - SPEAKER4: Professor Edith Crane – Intellectual, blunt, and impatient; crisp and matter-of-fact delivery.
 
