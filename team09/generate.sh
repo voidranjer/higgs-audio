@@ -1,1 +1,1 @@
-python3 generation.py --transcript transcript/multi_speaker/en_express.txt --ref_audio walter,belinda,chadwick,vex,en_man --ref_audio_in_system_message --chunk_method speaker --seed 12345 --out_path generation.wav
+python3 examples/generation.py --transcript examples/transcript/multi_speaker/en_express.txt --ref_audio walter,belinda,vex,broom_salesman,bigbang_sheldon,en_man --ref_audio_in_system_message --chunk_method speaker --seed 12345 --out_path generation.wav
