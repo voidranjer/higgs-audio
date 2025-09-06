@@ -1,9 +1,9 @@
-[SPEAKER2] M-M-Murdock! O-oh no, it’s happened! S-s-someone’s been… murdered! In compartment three!
+[SPEAKER0] Sit down, boy. You’ll answer proper. Murdock’s call stands.
 
-[SPEAKER0] Damn it all. This train ain’t big enough to hide a killer. Mark my words, they’re still here.
+[SPEAKER2] I-I-I don’t like this! What if h-he has something sharp—watch his hands!
 
-[SPEAKER1] Oh, heavens! Murdock, you’ll help, won’t you? You look smart enough to figure this out!
+[SPEAKER1] Oh dear, Peter, just stay calm. If you’re innocent, you’ve got nothing to fear!
 
-[SPEAKER4] Time is wasted on panic. Evidence degrades quickly. If we want answers, we move now.
+[SPEAKER3] Ooooh, this is better than a novel! Go on, Murdock, check his pockets! Check the coat, the shoes, the hat if he’s got one!
 
-[SPEAKER3] Ooooh, this is juicy! Who was it? What happened? Did they scream twice? I swear I heard two screams, maybe it was the wind—
+[SPEAKER4] Hurry. If a weapon is present, concealment grows less likely with each second wasted.
