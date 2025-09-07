@@ -2,6 +2,7 @@
 generation.wav
 .DS_Store
 tmp/
+frame.png
 
 # Temporary files generated in training
 dpo_samples*
