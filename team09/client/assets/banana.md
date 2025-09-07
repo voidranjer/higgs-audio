@@ -18,6 +18,8 @@ Below is a table of all characters involved. Do not make up characters outside o
 | emmanuel      | Emmanuel    | Nigerian pastor; bright patterned robes, warm booming laugh. Nosy and talkative, yet radiates comfort and hope in tense moments.         |
 | raj           | Raj         | Indian nuclear physicist; crisp white shirt, round glasses, ink-stained notebook. Brilliant and analytical, but aloof and condescending. |
 
+Additional notes: Marge's wardrobe should be inspired by the character Marge from The Simpsons. Peter should be inspired by the character of Peter Griffin from Family Guy.
+
 ## Instructions
 
 Create a storyboard image for the current scene. Art style should be close to Tintin (hand drawn).

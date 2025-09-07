@@ -92,6 +92,5 @@ Correct:
 - Provide plain text output, do not use markdown.
 - Make it short. Use conversational language, avoid formal words and long sentences.
 - Take note of the characters' ethnic background and culture. Inject grammar inaccuracies accordingly to reflect convincing accents/slang.
-- Limit to 4 voice lines maximum per turn.
 
-Begin by creating a starting off scenario. Then, on each turn, prompt the user for an action or decision.
+Begin by creating a starting off scenario. Use 4 voice lines for this. Then, on each turn, prompt the user for an action or decision. After receiving the user actions, continue the plot by providing exactly 2 more voice lines.
