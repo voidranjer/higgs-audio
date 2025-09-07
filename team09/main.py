@@ -1,10 +1,6 @@
 import subprocess
 import requests
 
-with open("llm.md", "r") as f:
-    initial_prompt = f.read()
-print(initial_prompt)
-
 def query_qwen(prompt):
     headers = {"Content-Type": "application/json"}
     data = {
@@ -16,4 +12,8 @@ def query_qwen(prompt):
     print(response.status_code)
     print(response.json()['choices'][0]['message']['content'])  # If the response is JSON
 
-query_qwen("what is 4 times 69")
+with open("llm.md", "r") as f:
+    initial_prompt = f.read()
+# print(initial_prompt)
+
+query_qwen("initial_prompt")
