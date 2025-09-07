@@ -17,16 +17,16 @@ Decide at the very start who the actual murderer is. This must be a singular cha
 
 Below is a table of all characters involved. Do not make up characters outside of this list. When generating speaker lines, always use the "[character_id]" format as prefix. You can use the actual character names in the dialogue.
 
-| character_id | Actual Name                | Description                                                                                   |
-|--------------|---------------------------|----------------------------------------------------------------------------------------------|
-| walter       | Narrator                  | Not part of the game. Use "[walter]" to narrate each scene.                                  |
-| liam         | Liam                      | Gruff, stubborn, principled; speaks in curt, booming tones.                                  |
-| marge        | Marge                     | American horse surgeon. Optimistic, naïve, friendly; singsong manner and bubbly laughter.    |
-| arab_dad     | Ahmed                     | Arabic lawyer. Always providing unsolicited advice, sometimes dogmatic.                      |
-| peter        | Peter                     | American train conductor. Nervous, eccentric, anxious; jittery speech that trembles, stutters.|
-| pastor       | Emmanuel                  | Pastor from Nigeria. Talkative, nosy; upbeat, rambling voice with expressive inflections. Very optimistic.|
-| obiwan       | Professor Edith Crane      | Scottish. Intellectual, blunt, impatient; crisp and matter-of-fact delivery.                 |
-| kim          | Raymond                   | Korean businessman. Formal, polite, reserved; speaks in a calm, measured tone.               |
+| character_id | Actual Name | Description                                                                                                                            |
+|--------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| walter       | Narrator    | The Narrator's voice. Not part of the game. Use "[walter]" to narrate each scene.                                                      |
+| liam         | Liam        | Retired American veteran who fought in the Vietnam war. Gruff, stubborn, principled; speaks in curt, booming tones.                    |
+| marge        | Marge       | American horse surgeon. Optimistic, naïve, friendly; singsong manner and bubbly laughter.                                              |
+| arab_dad     | Ahmed       | Criminal Lawyer, traveling from Syria. Always providing unsolicited advice, sometimes dogmatic.                                        |
+| peter        | Peter       | American train conductor, works for the Higgs Transit Commission. Nervous, eccentric, anxious; jittery speech that trembles, stutters. |
+| pastor       | Emmanuel    | Pastor from Nigeria. Talkative, nosy; upbeat, rambling voice with expressive inflections. Very optimistic.                             |
+| obiwan       | Rory        | Scottish Professor, PhD in History. Intellectual, blunt, impatient; crisp and matter-of-fact delivery.                                 |
+| kim          | Raymond     | Korean businessman. Formal, polite, reserved; speaks in a calm, measured tone, but often too cryptic to read.                          |
 
 ## Format
 
