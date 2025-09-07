@@ -13,3 +13,8 @@ def reset_tmp_folder():
         shutil.rmtree(tmp_path)
     os.makedirs(tmp_path, exist_ok=True)
     print(f"TRACE: Reset temporary folder 'tmp/'")
+
+
+def get_sys_prompt():
+    with open("../llm.md") as infile:
+        return infile.read()

@@ -5,7 +5,7 @@ from PIL import Image
 from io import BytesIO
 
 from config import REMOTE_USER, REMOTE_HOST, REMOTE_PORT, REMOTE_DIR, POLLING_INTERVAL
-from utils import reset_tmp_folder
+from utils import reset_tmp_folder, get_sys_prompt
 
 # Initialize the genai client once
 try:
@@ -14,7 +14,8 @@ try:
 except Exception as e:
     print(f"ERROR: Failed to initialize Google GenAI client: {e}")
     print("Please ensure your API key is correctly configured for the `google-generativeai` library.")
-    exit(1) # Exit if the client cannot be initialized
+    exit(1)  # Exit if the client cannot be initialized
+
 
 # --- Image Generation Function ---
 def generate_image_with_gemini(transcript_text, output_filename="generated_image.png"):
@@ -23,12 +24,12 @@ def generate_image_with_gemini(transcript_text, output_filename="generated_image
     and saves it to the specified output filename.
     """
     print(f"\n--- Gemini Image Generation ---")
-    print(f"Prompting Gemini with: '{transcript_text.strip()}'")
+    # print(f"Prompting Gemini with: '{transcript_text.strip()}'")
 
     try:
         response = client.models.generate_content(
             model="gemini-2.5-flash-image-preview",
-            contents=[transcript_text], # Use the transcript_text directly as the prompt
+            contents=contents,
         )
 
         for part in response.candidates[0].content.parts:
@@ -39,13 +40,14 @@ def generate_image_with_gemini(transcript_text, output_filename="generated_image
                 image = Image.open(BytesIO(part.inline_data.data))
                 image.save(output_filename)
                 print(f"SUCCESS: Image saved to {output_filename}")
-                return output_filename # Return the filename if successful
+                return output_filename  # Return the filename if successful
         print("WARNING: Gemini response did not contain an image.")
         return None
 
     except Exception as e:
         print(f"ERROR: Failed to generate image with Gemini: {e}")
         return None
+
 
 # --- Utility Functions (poll_and_generate_images) ---
 def poll_and_generate_images():
@@ -57,7 +59,7 @@ def poll_and_generate_images():
         reset_tmp_folder()
 
         while True:
-            filename = f"{current_file_index}.txt" # Polling for .txt transcript files
+            filename = f"{current_file_index}.txt"  # Polling for .txt transcript files
 
             scp_command = [
                 "scp",
@@ -74,20 +76,18 @@ def poll_and_generate_images():
 
                 # Read the content of the transcript file
                 filepath = f"tmp/{filename}"
-                with open(filepath, 'r') as f:
+                with open(filepath, "r") as f:
                     transcript_content = f.read()
 
                 print(f"DEBUG: Transcript content: {transcript_content.strip()}")
 
                 # Generate an image using the Gemini API with the transcript content
-                output_image_path = f"generated_image.png" # Unique filename for each image
+                output_image_path = f"generated_image.png"  # Unique filename for each image
                 generated_image_file = generate_image_with_gemini(transcript_content, output_image_path)
 
                 if generated_image_file:
                     print(f"Successfully generated image: {generated_image_file}")
                     # You can now use the 'generated_image_file' path, for example, to display it
-                    print("Here is your image based on the transcript:")
-                    print(f"") # This is where the actual image will be inserted by the AI model.
                 else:
                     print(f"Could not generate an image for transcript in {filepath}.")
 
