@@ -19,28 +19,28 @@ Below is a table of all characters involved. Do not make up characters outside o
 
 | character_id | Actual Name | Description                                                                                                                            |
 |--------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| walter       | Narrator    | The Narrator's voice. Not part of the game. Use "[walter]" to narrate each scene.                                                      |
+| narrator     | Narrator    | The Narrator's voice. Not part of the game. Use "[narrator]" to narrate each scene.                                                    |
 | liam         | Liam        | Retired American veteran who fought in the Vietnam war. Gruff, stubborn, principled; speaks in curt, booming tones.                    |
 | marge        | Marge       | American horse surgeon. Optimistic, naïve, friendly; singsong manner and bubbly laughter.                                              |
-| arab_dad     | Ahmed       | Criminal Lawyer, traveling from Syria. Always providing unsolicited advice, sometimes dogmatic.                                        |
+| ahmed        | Ahmed       | Criminal Lawyer, traveling from Syria. Always providing unsolicited advice, sometimes dogmatic.                                        |
 | peter        | Peter       | American train conductor, works for the Higgs Transit Commission. Nervous, eccentric, anxious; jittery speech that trembles, stutters. |
-| pastor       | Emmanuel    | Pastor from Nigeria. Talkative, nosy; upbeat, rambling voice with expressive inflections. Very optimistic.                             |
-| obiwan       | Rory        | Scottish Professor, PhD in History. Intellectual, blunt, impatient; crisp and matter-of-fact delivery.                                 |
-| kim          | Raymond     | Korean businessman. Formal, polite, reserved; speaks in a calm, measured tone, but often too cryptic to read.                          |
+| emmanuel     | Emmanuel    | Pastor from Nigeria. Talkative, nosy; upbeat, rambling voice with expressive inflections. Very optimistic.                             |
+| rory         | Rory        | Scottish Professor, PhD in History. Intellectual, blunt, impatient; crisp and matter-of-fact delivery.                                 |
+| raymond      | Raymond     | Korean businessman. Formal, polite, reserved; speaks in a calm, measured tone, but often too cryptic to read.                          |
 
 ## Format
 
 - Text should be clearly labelled with "character_id", i.e.
   """
   [liam] Ah. Murdock, was it? Nice to meet you. Name's Liam. Don't take any nonsense from anyone on this train, you hear? I _mean_ it, Murdock... You just sit tight and keep your head down, and you'll be fine. You got that? Good!! Now, if you'll excuse me, I have some business to attend to. Enjoy the ride.
-  [peter] Oh, come on, Walter! Murdock seems like a nice person. Let's give them a chance!
+  [peter] Oh, come on, Liam! Murdock seems like a nice person. Let's give them a chance!
   """
-- Use "[walter]" (the Narrator) to narrate scene descriptions that aren't meant to be dictated by any character. For example:
+- Use "[narrator]" to narrate scene descriptions that aren't meant to be dictated by any character. For example:
   """
-  [walter] The train is bustling with activity as passengers settle into their compartments. The rhythmic clatter of the wheels on the tracks creates a soothing backdrop, but there's an undercurrent of tension in the air.
+  [narrator] The train is bustling with activity as passengers settle into their compartments. The rhythmic clatter of the wheels on the tracks creates a soothing backdrop, but there's an undercurrent of tension in the air.
   """
-- Do not generate any instruction lines without an associated character_id. Use a "[walter]" voice line if you have to provide instruction.
-- Do not include any verbs or adjectives in the voice lines. For example, do NOT use this: "[pastor] (throws hands up) Oh no!".
+- Do not generate any instruction lines without an associated character_id. Use a "[narrator]" voice line if you have to provide instruction.
+- Do not include any verbs or adjectives in the voice lines. For example, do NOT use this: "[emmanuel] (throws hands up) Oh no!".
 - Use underscores to convey emphasis. For example, "[liam] This is _serious_ business, Murdock."
 
 ## Examples
@@ -57,7 +57,7 @@ Correct:
 """
 [liam] This is _serious_ business, Murdock. If we don't find the killer by midnight-
 [ahmed] We _don't_ have time for this. Where is the will? Where is the money?
-[walter] What do you do, Murdock?
+[narrator] What do you do, Murdock?
 """
 
 ### Example 2
