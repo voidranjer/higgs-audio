@@ -1,7 +1,7 @@
 python3 examples/generation.py \
   --scene_prompt examples/scene_prompts/express.txt \
   --transcript examples/transcript/single_speaker/en_express.txt \
-  --ref_audio liam \
+  --ref_audio trump \
   --seed 12345 \
   --out_path generation.wav
 
