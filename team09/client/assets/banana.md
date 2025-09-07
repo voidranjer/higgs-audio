@@ -20,4 +20,4 @@ Below is a table of all characters involved. Do not make up characters outside o
 
 ## Instructions
 
-Create a storyboard image for the current scene.
+Create a storyboard image for the current scene. Art style should be close to Tintin (hand drawn).
