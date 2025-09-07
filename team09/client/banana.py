@@ -5,7 +5,7 @@ from PIL import Image
 from io import BytesIO
 
 from config import REMOTE_USER, REMOTE_HOST, REMOTE_PORT, REMOTE_DIR, POLLING_INTERVAL
-from utils import reset_tmp_folder, get_sys_prompt, load_image
+from utils import reset_tmp_folder, get_sys_prompt
 
 # Initialize the genai client once
 try:
@@ -29,71 +29,29 @@ def generate_image_with_gemini(
     """
     print(f"\n--- Gemini Image Generation ---")
 
+    # Only keep lines in transcript_text that begin with "[narrator]"
+    transcript_lines = [
+        line for line in transcript_text.strip().splitlines() if line.strip().startswith("[narrator]")
+    ]
+    transcript_text = "\n".join(transcript_lines)
+    
+    # Remove the "[narrator]" prefix from each line for cleaner input
+    transcript_text = transcript_text.replace("[narrator]", "").strip()
+
     contents = [
         {
             "role": "user",
             "parts": [
-                {"text": get_sys_prompt()},
+                {"text": get_sys_prompt() + "\n\n## Current Scene\n\n" + transcript_text},
             ],
         },
-        {
-            "role": "user",
-            "parts": [
-                {"text": "Image of Ahmed"},
-                {"inline_data": {"mime_type": "image/png", "data": load_image("Ahmed.png")}},
-            ],
-        },
-        {
-            "role": "user",
-            "parts": [
-                {"text": "Image of Emmanuel"},
-                {"inline_data": {"mime_type": "image/png", "data": load_image("Emmanuel.png")}},
-            ],
-        },
-        {
-            "role": "user",
-            "parts": [
-                {"text": "Image of Liam"},
-                {"inline_data": {"mime_type": "image/png", "data": load_image("Liam.png")}},
-            ],
-        },
-        {
-            "role": "user",
-            "parts": [
-                {"text": "Image of Marge"},
-                {"inline_data": {"mime_type": "image/png", "data": load_image("Marge.png")}},
-            ],
-        },
-        {
-            "role": "user",
-            "parts": [
-                {"text": "Image of Peter"},
-                {"inline_data": {"mime_type": "image/png", "data": load_image("Peter.png")}},
-            ],
-        },
-        {
-            "role": "user",
-            "parts": [
-                {"text": "Image of Rory"},
-                {"inline_data": {"mime_type": "image/png", "data": load_image("Rory.png")}},
-            ],
-        },
-        {
-            "role": "user",
-            "parts": [
-                {
-                    "text": "The current scene of the game is as follows:\n\n"
-                    + transcript_text
-                },
-                {
-                    "text": "This picture shows what the previous scene of the game looked like."
-                },
-                {"inline_data": {"mime_type": "image/png", "data": load_image("frame.png")}},
-                {
-                    "text": "Given the new scene description, create a storyboard image for the current scene, based on the previous frame as provided."
-                },
-            ],
-        },
+        # {
+        #     "role": "user",
+        #     "parts": [
+        #         {"text": "Image of Ahmed"},
+        #         {"inline_data": {"mime_type": "image/png", "data": load_image("Ahmed.png")}},
+        #     ],
+        # },
     ]
 
     try:
