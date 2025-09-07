@@ -1,7 +1,7 @@
 # Team09
 generation.wav
 .DS_Store
-tmp/*
+tmp/
 
 # Temporary files generated in training
 dpo_samples*
