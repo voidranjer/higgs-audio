@@ -21,8 +21,10 @@ model_client = HiggsAudioModelClient(
 messages = []
 
 # generate .wav files
+wav_idx = 0
 def generate_wavs(lines):
-    for i, (speaker, line) in enumerate(lines):
+    global wav_idx
+    for speaker, line in lines:
         with open(f'tmp/transcript.txt', 'w') as f:
             f.write(line) 
         generate(model_client, 
@@ -31,8 +33,9 @@ def generate_wavs(lines):
                 ref_audio=speaker,
                 chunk_method='speaker',
                 seed=12345,
-                out_path=f'tmp/{i}.wav'
+                out_path=f'tmp/{wav_idx}.wav'
                 )
+        wav_idx += 1
         # subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
 
 txt_idx = 0
