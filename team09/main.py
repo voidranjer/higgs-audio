@@ -16,6 +16,21 @@ model_client = HiggsAudioModelClient(
 
 messages = []
 
+# generate .wav files
+def generate_wavs(lines):
+    for i, (speaker, line) in enumerate(lines):
+        with open(f'tmp/{i}.txt', 'w') as f:
+            f.write(line) 
+        generate(model_client, 
+                scene_prompt="../examples/transcript/express.txt",
+                transcript='tmp/transcript.txt',
+                ref_audio=speaker,
+                chunk_method='speaker',
+                seed=12345,
+                out_path=f'tmp/{i}.wav'
+                )
+        # subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
+
 def query_qwen(prompt):
     messages.append({"role":"user","content":f"{prompt}"})
     headers = {"Content-Type": "application/json"}
@@ -66,21 +81,7 @@ os.makedirs("tmp")
 # get script lines
 script = query_qwen(initial_prompt)
 lines = script_to_lines(script)
-
-# generate .wav files
-for i, (speaker, line) in enumerate(lines):
-    with open(f'tmp/{i}.txt', 'w') as f:
-       f.write(line) 
-    generate(model_client, 
-             scene_prompt="../examples/transcript/express.txt",
-             transcript='tmp/transcript.txt',
-             ref_audio=speaker,
-             chunk_method='speaker',
-             seed=12345,
-             out_path='tmp/{i}.wav'
-            )
-    # subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
-
+generate_wavs(lines)
 while True:
     user_response = input()
     response_text = query_qwen(user_response)
