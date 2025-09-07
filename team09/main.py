@@ -1,5 +1,8 @@
 import subprocess
 import requests
+import re
+import shutil
+import os
 
 messages = []
 
@@ -19,12 +22,48 @@ def query_qwen(prompt):
     response_text = message['content']
     response_text = response_text[response_text.find("</think>") + 8:]
     print(response_text)
+    return response_text
+
+def script_to_lines(script):
+    # Clean up newlines and join wrapped lines
+    text = re.sub(r'\n\s+', ' ', script.strip())
+
+    # Split while keeping the speaker tags
+    parts = re.split(r'\[(\w+)\]', text)
+
+    # Build a list of (speaker, line) tuples
+    lines = []
+    for i in range(1, len(parts), 2):
+        speaker = parts[i].lower()
+        line = parts[i + 1].strip()
+        lines.append((speaker, line))
+
+    # Example: print the result
+    # for speaker, line in lines:
+    #     print(f"{speaker}: {line}")
+    
+    return lines
 
 with open("llm.md", "r") as f:
     initial_prompt = f.read()
 # print(initial_prompt)
 
-query_qwen(initial_prompt)
+# get script lines
+script = query_qwen(initial_prompt)
+lines = script_to_lines(script)
+
+# generate .wav files
+for i, (speaker, line) in enumerate(lines):
+    with open('tmp/transcript.txt', 'w') as f:
+       f.write(line) 
+    subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
+
 while True:
     user_response = input()
-    query_qwen(user_response)
+    response_text = query_qwen(user_response)
+    lines = script_to_lines(response_text)
+    for i, (speaker, line) in enumerate(lines):
+        with open('tmp/transcript.txt', 'w') as f:
+            f.write(line) 
+        subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
+
