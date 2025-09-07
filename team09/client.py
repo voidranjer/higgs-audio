@@ -11,6 +11,7 @@ REMOTE_PORT = "40806"
 REMOTE_DIR = "/home/james/higgs-audio/team09/tmp"
 POLLING_INTERVAL = 0.5  # Time to wait between polling cycles in seconds
 
+
 # --- Utility Functions ---
 def play_audio(filepath):
     """
@@ -19,7 +20,7 @@ def play_audio(filepath):
     """
     system_os = platform.system()
     audio_command = None
-    
+
     if system_os == "Darwin":
         audio_command = "afplay"
     elif system_os == "Linux":
@@ -38,21 +39,17 @@ def play_audio(filepath):
     except subprocess.CalledProcessError as e:
         print(f"ERROR: Failed to play audio file. Command returned an error: {e}")
 
-def cleanup_remote_files():
+
+def delete_remote_file(filename):
     """
-    Deletes all .wav files in the remote directory using an SSH command.
+    Deletes a file on the remote server using SSH.
     """
-    print("DEBUG: Sequence complete. Deleting remote files...")
-    ssh_command = [
-        "ssh",
-        "-p", REMOTE_PORT,
-        f"{REMOTE_USER}@{REMOTE_HOST}",
-        f"rm -f {REMOTE_DIR}/*.wav"
-    ]
-    # Execute the SSH command to delete files.
+    print(f"DEBUG: Deleting remote file '{filename}' via SSH.")
+    ssh_command = ["ssh", "-p", REMOTE_PORT, f"{REMOTE_USER}@{REMOTE_HOST}", f"rm -f {REMOTE_DIR}/{filename}"]
+    # Execute the SSH command to delete the file.
     result = subprocess.run(ssh_command, capture_output=True, text=True)
     if result.returncode == 0:
-        print("TRACE: Remote files deleted successfully.")
+        print(f"TRACE: Remote file '{filename}' deleted successfully.")
     else:
         print(f"ERROR: Failed to delete remote files. SSH command failed with return code {result.returncode}")
         print(f"Stderr: {result.stderr}")
@@ -61,6 +58,12 @@ def cleanup_remote_files():
 def poll_and_play():
     """
     Main function to poll the remote directory for new audio files.
+
+    Algorithm logic:
+    1. Start by polling for 0.wav.
+    2. When 0.wav appears, play it. After playing, delete it from the remote server using SSH.
+    3. Check for the next file in sequence (1.wav, 2.wav, etc.) and repeat step 2.
+       Also check for 0.wav again. If 0.wav appears before the next in sequence is found, reset back to step 1.
     """
     print(f"DEBUG: Starting audio polling at interval of {POLLING_INTERVAL} seconds.")
     print("-" * 30)
@@ -68,20 +71,20 @@ def poll_and_play():
     while True:
         try:
             current_file_index = 0
-            found_audio_in_this_cycle = False
 
             # Inner loop to check for files sequentially (0.wav, 1.wav, etc.)
             while True:
                 filename = f"{current_file_index}.wav"
-                
-                print(f"TRACE: Checking for file: {filename}")
-                
+
+                # print(f"TRACE: Checking for file: {filename}")
+
                 # Construct the scp command to download the file.
                 scp_command = [
                     "scp",
-                    "-P", REMOTE_PORT,
+                    "-P",
+                    REMOTE_PORT,
                     f"{REMOTE_USER}@{REMOTE_HOST}:{REMOTE_DIR}/{filename}",
-                    "."  # Download to the current directory.
+                    ".",  # Download to the current directory.
                 ]
 
                 # Execute the scp command. We redirect stderr to a null device
@@ -91,23 +94,32 @@ def poll_and_play():
                 if result.returncode == 0:
                     # File was successfully downloaded.
                     print(f"TRACE: Found and downloaded {filename}.")
-                    found_audio_in_this_cycle = True
                     play_audio(filename)
                     # Clean up the local file after playing to avoid clutter.
                     os.remove(filename)
                     print(f"DEBUG: Deleted local file: {filename}")
+                    # Cleanup remote file after playing.
+                    delete_remote_file(filename)
                     current_file_index += 1
+                elif current_file_index != 0:
+                    # Check if 0.wav is available to reset the sequence.
+                    scp_command[4] = f"{REMOTE_USER}@{REMOTE_HOST}:{REMOTE_DIR}/0.wav"
+                    reset_result = subprocess.run(scp_command, capture_output=True)
+                    if reset_result.returncode == 0:
+                        filename = "0.wav"
+                        print("TRACE: 0.wav found. Resetting sequence to start from 0.wav.")
+                        play_audio(filename)
+                        os.remove(filename)
+                        print(f"DEBUG: Deleted local file: {filename}")
+                        delete_remote_file(filename)
+                        current_file_index = 1  # Next file to check will be 1.wav
                 else:
                     # File was not found. This marks the end of the sequence.
-                    print(f"TRACE: File {filename} not found. End of sequence.")
+                    # print(f"TRACE: File {filename} not found. End of sequence.")
                     break  # Break the inner loop to start the cleanup process.
 
-            if found_audio_in_this_cycle:
-                # If we played any audio, clean up the remote directory.
-                cleanup_remote_files()
-            
-            print(f"DEBUG: No files found in this cycle. Waiting for {POLLING_INTERVAL} seconds...")
-            print("-" * 30)
+            # print(f"DEBUG: No files found in this cycle. Waiting for {POLLING_INTERVAL} seconds...")
+            # print("-" * 30)
             time.sleep(POLLING_INTERVAL)
 
         except KeyboardInterrupt:
@@ -121,4 +133,3 @@ def poll_and_play():
 
 if __name__ == "__main__":
     poll_and_play()
-
