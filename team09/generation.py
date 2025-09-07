@@ -283,6 +283,7 @@ class HiggsAudioModelClient:
         if ras_win_len is not None and ras_win_len <= 0:
             ras_win_len = None
         sr = 24000
+        # sr = 12000
         audio_out_ids_l = []
         generated_audio_ids = []
         generation_messages = []

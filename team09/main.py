@@ -23,7 +23,7 @@ def generate_wavs(lines):
             f.write(line) 
         generate(model_client, 
                 scene_prompt="../examples/transcript/express.txt",
-                transcript='tmp/transcript.txt',
+                transcript=f'tmp/{i}.txt',
                 ref_audio=speaker,
                 chunk_method='speaker',
                 seed=12345,
@@ -82,14 +82,9 @@ os.makedirs("tmp")
 script = query_qwen(initial_prompt)
 lines = script_to_lines(script)
 generate_wavs(lines)
+
 while True:
     user_response = input()
     response_text = query_qwen(user_response)
     lines = script_to_lines(response_text)
-    for i, (speaker, line) in enumerate(lines):
-        with open('tmp/transcript.txt', 'w') as f:
-            f.write(line) 
-        subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
-
-if __name__ == '__main__':
-    print('hi')
+    generate_wavs(lines)
