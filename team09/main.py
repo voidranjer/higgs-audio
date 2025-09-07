@@ -42,19 +42,24 @@ txt_idx = 0
 def query_qwen(prompt):
     global txt_idx
     messages.append({"role":"user","content":f"{prompt}"})
-    headers = {"Content-Type": "application/json"}
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-key": "REPLACEME",
+        }
     data = {
-            "model": "qwen3-30b-a3b-thinking-fp8",
+            "model": "claude-sonnet-4-20250514",
+            # "model": "qwen3-30b-a3b-thinking-fp8",
             "messages": messages,
             # "max_tokens": 256
             }
-    response = requests.post("http://20.66.111.167:31022/v1/chat/completions", headers=headers, json=data)
+    response = requests.post("https://api.anthropic.com/v1/chat/completions", headers=headers, json=data)
+    # response = requests.post("http://20.66.111.167:31022/v1/chat/completions", headers=headers, json=data)
     # print(response.status_code)
     response = response.json()
     message = response['choices'][0]['message']
     messages.append(message)
     response_text = message['content']
-    response_text = response_text[response_text.find("</think>") + 8:]
+    # response_text = response_text[response_text.find("</think>") + 8:]
     print(response_text)
 
     with open(f'tmp/{txt_idx}.txt', 'w') as f:
