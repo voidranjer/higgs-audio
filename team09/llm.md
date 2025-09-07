@@ -26,7 +26,6 @@ Below is a table of all characters involved. Do not make up characters outside o
 | peter        | Peter       | American train conductor, works for the Higgs Transit Commission. Nervous, eccentric, anxious; jittery speech that trembles, stutters. |
 | emmanuel     | Emmanuel    | Pastor from Nigeria. Talkative, nosy; upbeat, rambling voice with expressive inflections. Very optimistic.                             |
 | rory         | Rory        | Scottish Professor, PhD in History. Intellectual, blunt, impatient; crisp and matter-of-fact delivery.                                 |
-| raymond      | Raymond     | Korean businessman. Formal, polite, reserved; speaks in a calm, measured tone, but often too cryptic to read.                          |
 
 ## Format
 

@@ -2,16 +2,8 @@ import subprocess
 import time
 import platform
 
+from config import REMOTE_USER, REMOTE_HOST, REMOTE_PORT, REMOTE_DIR, POLLING_INTERVAL
 from utils import reset_tmp_folder
-
-# --- Configuration ---
-# You can change these values to match your specific setup.
-REMOTE_USER = "james"
-REMOTE_HOST = "184.148.227.159"
-REMOTE_PORT = "40806"
-REMOTE_DIR = "/home/james/higgs-audio/team09/tmp"
-POLLING_INTERVAL = 0.5  # Time to wait between polling cycles in seconds
-
 
 # --- Utility Functions ---
 def play_audio(filepath):
@@ -39,22 +31,6 @@ def play_audio(filepath):
         print(f"ERROR: '{audio_command}' command not found. Please ensure it is installed and in your system's PATH.")
     except subprocess.CalledProcessError as e:
         print(f"ERROR: Failed to play audio file. Command returned an error: {e}")
-
-
-# def delete_remote_file(filename):
-#     """
-#     Deletes a file on the remote server using SSH.
-#     """
-#     print(f"DEBUG: Deleting remote file '{filename}' via SSH.")
-#     ssh_command = ["ssh", "-p", REMOTE_PORT, f"{REMOTE_USER}@{REMOTE_HOST}", f"rm -f {REMOTE_DIR}/{filename}"]
-#     # Execute the SSH command to delete the file.
-#     result = subprocess.run(ssh_command, capture_output=True, text=True)
-#     if result.returncode == 0:
-#         print(f"TRACE: Remote file '{filename}' deleted successfully.")
-#     else:
-#         print(f"ERROR: Failed to delete remote files. SSH command failed with return code {result.returncode}")
-#         print(f"Stderr: {result.stderr}")
-
 
 def poll_and_play():
     """
@@ -95,7 +71,7 @@ def poll_and_play():
             if result.returncode == 0:
                 # File was successfully downloaded.
                 print(f"TRACE: Found and downloaded {filename}.")
-                play_audio(filename)
+                play_audio(f"tmp/{filename}")
                 current_file_index += 1
             else:
                 # File was not found. This marks the end of the sequence.

@@ -1,18 +1,11 @@
 import subprocess
 import time
-import os
-import platform
 from google import genai
-from google.genai import types
 from PIL import Image
 from io import BytesIO
 
-# --- Configuration ---
-REMOTE_USER = "james"
-REMOTE_HOST = "184.148.227.159"
-REMOTE_PORT = "40806"
-REMOTE_DIR = "/home/james/higgs-audio/team09/tmp"
-POLLING_INTERVAL = 0.5  # Time to wait between polling cycles in seconds
+from config import REMOTE_USER, REMOTE_HOST, REMOTE_PORT, REMOTE_DIR, POLLING_INTERVAL
+from utils import reset_tmp_folder
 
 # Initialize the genai client once
 try:
@@ -61,6 +54,7 @@ def poll_and_generate_images():
 
     try:
         current_file_index = 0
+        reset_tmp_folder()
 
         while True:
             filename = f"{current_file_index}.txt" # Polling for .txt transcript files
@@ -70,7 +64,7 @@ def poll_and_generate_images():
                 "-P",
                 REMOTE_PORT,
                 f"{REMOTE_USER}@{REMOTE_HOST}:{REMOTE_DIR}/{filename}",
-                ".",  # Download to the current directory.
+                "./tmp",
             ]
 
             result = subprocess.run(scp_command, capture_output=True)
@@ -79,13 +73,14 @@ def poll_and_generate_images():
                 print(f"TRACE: Found and downloaded {filename}.")
 
                 # Read the content of the transcript file
-                with open(filename, 'r') as f:
+                filepath = f"tmp/{filename}"
+                with open(filepath, 'r') as f:
                     transcript_content = f.read()
 
                 print(f"DEBUG: Transcript content: {transcript_content.strip()}")
 
                 # Generate an image using the Gemini API with the transcript content
-                output_image_path = f"generated_image_{current_file_index}.png" # Unique filename for each image
+                output_image_path = f"generated_image.png" # Unique filename for each image
                 generated_image_file = generate_image_with_gemini(transcript_content, output_image_path)
 
                 if generated_image_file:
@@ -94,12 +89,8 @@ def poll_and_generate_images():
                     print("Here is your image based on the transcript:")
                     print(f"") # This is where the actual image will be inserted by the AI model.
                 else:
-                    print(f"Could not generate an image for transcript in {filename}.")
+                    print(f"Could not generate an image for transcript in {filepath}.")
 
-                # Clean up the local transcript file after processing
-                os.remove(filename)
-                print(f"DEBUG: Deleted local transcript file: {filename}")
-                
                 current_file_index += 1
             else:
                 # File was not found. Wait and try again.
