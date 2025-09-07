@@ -160,6 +160,8 @@ celerybeat.pid
 /higgs_audio_env*
 /venv*
 
+test.py
+
 # Spyder project settings
 .spyderproject
 .spyproject
