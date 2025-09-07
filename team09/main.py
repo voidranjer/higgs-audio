@@ -1,9 +1,13 @@
-import subprocess
 import requests
 import re
 import shutil
 import os
 from generation import main as generate, HiggsAudioModelClient
+
+# recreate tmp directory
+if os.path.exists("tmp") and os.path.isdir("tmp"):
+    shutil.rmtree("tmp")
+os.makedirs("tmp")
 
 model_client = HiggsAudioModelClient(
         model_path="bosonai/higgs-audio-v2-generation-3B-base",
@@ -19,11 +23,11 @@ messages = []
 # generate .wav files
 def generate_wavs(lines):
     for i, (speaker, line) in enumerate(lines):
-        with open(f'tmp/{i}.txt', 'w') as f:
+        with open(f'tmp/transcript.txt', 'w') as f:
             f.write(line) 
         generate(model_client, 
                 scene_prompt="../examples/transcript/express.txt",
-                transcript=f'tmp/{i}.txt',
+                transcript=f'tmp/transcript.txt',
                 ref_audio=speaker,
                 chunk_method='speaker',
                 seed=12345,
@@ -31,7 +35,9 @@ def generate_wavs(lines):
                 )
         # subprocess.run(f"python3 ../examples/generation.py --scene_prompt ../examples/transcript/express.txt --transcript tmp/transcript.txt --ref_audio {speaker} --chunk_method speaker --seed 12345 --out_path tmp/{i}.wav", shell=True)
 
+txt_idx = 0
 def query_qwen(prompt):
+    global txt_idx
     messages.append({"role":"user","content":f"{prompt}"})
     headers = {"Content-Type": "application/json"}
     data = {
@@ -47,6 +53,11 @@ def query_qwen(prompt):
     response_text = message['content']
     response_text = response_text[response_text.find("</think>") + 8:]
     print(response_text)
+
+    with open(f'tmp/{txt_idx}.txt', 'w') as f:
+        f.write(response_text)
+    txt_idx += 1
+
     return response_text
 
 def script_to_lines(script):
@@ -72,11 +83,6 @@ def script_to_lines(script):
 with open("llm.md", "r") as f:
     initial_prompt = f.read()
 # print(initial_prompt)
-
-# recreate tmp directory
-if os.path.exists("tmp") and os.path.isdir("tmp"):
-    shutil.rmtree("tmp")
-os.makedirs("tmp")
 
 # get script lines
 script = query_qwen(initial_prompt)
