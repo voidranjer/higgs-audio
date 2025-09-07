@@ -16,5 +16,10 @@ def reset_tmp_folder():
 
 
 def get_sys_prompt():
-    with open("../llm.md") as infile:
+    with open("assets/banana.md") as infile:
         return infile.read()
+
+
+def load_image(image_name: str) -> bytes:
+    with open(f"assets/{image_name}", "rb") as image_file:
+        return image_file.read()
