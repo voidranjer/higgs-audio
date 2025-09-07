@@ -1,0 +1,124 @@
+import subprocess
+import time
+import os
+import platform
+
+# --- Configuration ---
+# You can change these values to match your specific setup.
+REMOTE_USER = "james"
+REMOTE_HOST = "184.148.227.159"
+REMOTE_PORT = "40806"
+REMOTE_DIR = "/home/james/higgs-audio/team09/tmp"
+POLLING_INTERVAL = 0.5  # Time to wait between polling cycles in seconds
+
+# --- Utility Functions ---
+def play_audio(filepath):
+    """
+    Plays a local .wav file using the appropriate system command.
+    Uses 'afplay' for macOS and 'aplay' for Linux.
+    """
+    system_os = platform.system()
+    audio_command = None
+    
+    if system_os == "Darwin":
+        audio_command = "afplay"
+    elif system_os == "Linux":
+        audio_command = "aplay"
+    else:
+        print(f"ERROR: Unsupported operating system: {system_os}. Cannot play audio.")
+        return
+
+    print(f"DEBUG: Playing audio file: {filepath} with command '{audio_command}'.")
+    try:
+        # We redirect stdout and stderr to a null device to avoid cluttering the terminal.
+        subprocess.run([audio_command, filepath], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print(f"DEBUG: Finished playing {filepath}.")
+    except FileNotFoundError:
+        print(f"ERROR: '{audio_command}' command not found. Please ensure it is installed and in your system's PATH.")
+    except subprocess.CalledProcessError as e:
+        print(f"ERROR: Failed to play audio file. Command returned an error: {e}")
+
+def cleanup_remote_files():
+    """
+    Deletes all .wav files in the remote directory using an SSH command.
+    """
+    print("DEBUG: Sequence complete. Deleting remote files...")
+    ssh_command = [
+        "ssh",
+        "-p", REMOTE_PORT,
+        f"{REMOTE_USER}@{REMOTE_HOST}",
+        f"rm -f {REMOTE_DIR}/*.wav"
+    ]
+    # Execute the SSH command to delete files.
+    result = subprocess.run(ssh_command, capture_output=True, text=True)
+    if result.returncode == 0:
+        print("TRACE: Remote files deleted successfully.")
+    else:
+        print(f"ERROR: Failed to delete remote files. SSH command failed with return code {result.returncode}")
+        print(f"Stderr: {result.stderr}")
+
+
+def poll_and_play():
+    """
+    Main function to poll the remote directory for new audio files.
+    """
+    print(f"DEBUG: Starting audio polling at interval of {POLLING_INTERVAL} seconds.")
+    print("-" * 30)
+
+    while True:
+        try:
+            current_file_index = 0
+            found_audio_in_this_cycle = False
+
+            # Inner loop to check for files sequentially (0.wav, 1.wav, etc.)
+            while True:
+                filename = f"{current_file_index}.wav"
+                
+                print(f"TRACE: Checking for file: {filename}")
+                
+                # Construct the scp command to download the file.
+                scp_command = [
+                    "scp",
+                    "-P", REMOTE_PORT,
+                    f"{REMOTE_USER}@{REMOTE_HOST}:{REMOTE_DIR}/{filename}",
+                    "."  # Download to the current directory.
+                ]
+
+                # Execute the scp command. We redirect stderr to a null device
+                # to suppress 'No such file or directory' errors.
+                result = subprocess.run(scp_command, capture_output=True)
+
+                if result.returncode == 0:
+                    # File was successfully downloaded.
+                    print(f"TRACE: Found and downloaded {filename}.")
+                    found_audio_in_this_cycle = True
+                    play_audio(filename)
+                    # Clean up the local file after playing to avoid clutter.
+                    os.remove(filename)
+                    print(f"DEBUG: Deleted local file: {filename}")
+                    current_file_index += 1
+                else:
+                    # File was not found. This marks the end of the sequence.
+                    print(f"TRACE: File {filename} not found. End of sequence.")
+                    break  # Break the inner loop to start the cleanup process.
+
+            if found_audio_in_this_cycle:
+                # If we played any audio, clean up the remote directory.
+                cleanup_remote_files()
+            
+            print(f"DEBUG: No files found in this cycle. Waiting for {POLLING_INTERVAL} seconds...")
+            print("-" * 30)
+            time.sleep(POLLING_INTERVAL)
+
+        except KeyboardInterrupt:
+            print("\nProgram terminated by user.")
+            break
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            # Wait before retrying to prevent a rapid error loop.
+            time.sleep(5)
+
+
+if __name__ == "__main__":
+    poll_and_play()
+
